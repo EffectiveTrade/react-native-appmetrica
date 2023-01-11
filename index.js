@@ -1,55 +1,112 @@
-// @flow
+/*
+ * Version for React Native
+ * © 2020 YANDEX
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * https://yandex.com/legal/appmetrica_sdk_agreement/
+ */
 
-import { NativeModules } from 'react-native';
-const { AppMetrica } = NativeModules;
+import {NativeModules} from 'react-native';
 
-type ActivationConfig = {
-    apiKey: string,
-    sessionTimeout?: number,
-    firstActivationAsUpdate?: boolean,
-};
+const {AppMetrica} = NativeModules;
+
+type AppMetricaConfig = {
+  apiKey: string,
+  appVersion?: string,
+  crashReporting?: boolean,
+  firstActivationAsUpdate?: boolean,
+  location: Location,
+  locationTracking?: boolean,
+  logs?: boolean,
+  sessionTimeout?: number,
+  statisticsSending?: boolean,
+  preloadInfo?: PreloadInfo,
+  // Only Android
+  installedAppCollecting?: boolean,
+  maxReportsInDatabaseCount?: number,
+  nativeCrashReporting?: boolean,
+  // Only iOS
+  activationAsSessionStart?: boolean,
+  sessionsAutoTracking?: boolean,
+}
+
+type PreloadInfo = {
+  trackingId: string,
+  additionalInfo?: Object,
+}
+
+type Location = {
+  latitude: number,
+  longitude: number,
+  altitude?: number,
+  accuracy?: number,
+  course?: number,
+  speed?: number,
+  timestamp?: number
+}
+
+type AppMetricaDeviceIdReason = 'UNKNOWN' | 'NETWORK' | 'INVALID_RESPONSE';
 
 export default {
 
-    /**
-     * Starts the statistics collection process.
-     * @param {string} apiKey
-     */
-    activateWithApiKey(apiKey: string) {
-        AppMetrica.activateWithApiKey(apiKey);
-    },
+  activate(config: AppMetricaConfig) {
+    AppMetrica.activate(config);
+  },
 
-    /**
-     * Starts the statistics collection process using config.
-     * @param {object} params
-     */
-    activateWithConfig(params: ActivationConfig) {
-        AppMetrica.activateWithConfig(params);
-    },
+  // Android
+  async getLibraryApiLevel(): number {
+    return AppMetrica.getLibraryApiLevel();
+  },
 
-    /**
-     * Sends a custom event message and additional parameters (optional).
-     * @param {string} message
-     * @param {object} [params=null]
-     */
-    reportEvent(message: string, params: ?Object = null) {
-        AppMetrica.reportEvent(message, params);
-    },
+  async getLibraryVersion(): string {
+    return AppMetrica.getLibraryVersion();
+  },
 
-    /**
-     * Sends error with reason.
-     * @param {string} error
-     * @param {object} reason
-     */
-    reportError(error: string, reason: Object) {
-        AppMetrica.reportError(error, reason);
-    },
+  pauseSession() {
+    AppMetrica.pauseSession();
+  },
 
-    /**
-     * Sets the ID of the user profile.
-     * @param {string} userProfileId
-     */
-    setUserProfileID(userProfileId: string) {
-        AppMetrica.setUserProfileID(userProfileId);
-    },
+  reportAppOpen(deeplink: ?string = null) {
+    AppMetrica.reportAppOpen(deeplink);
+  },
+
+  reportError(error: string, reason: Object) {
+    AppMetrica.reportError(error);
+  },
+
+  reportEvent(eventName: string, attributes: ?Object = null) {
+    AppMetrica.reportEvent(eventName, attributes);
+  },
+
+  reportReferralUrl(referralUrl: string) {
+    AppMetrica.reportReferralUrl(referralUrl);
+  },
+
+  requestAppMetricaDeviceID(listener: (deviceId?: String, reason?: AppMetricaDeviceIdReason) => void) {
+    AppMetrica.requestAppMetricaDeviceID(listener);
+  },
+
+  resumeSession() {
+    AppMetrica.resumeSession();
+  },
+
+  sendEventsBuffer() {
+    AppMetrica.sendEventsBuffer();
+  },
+
+  setLocation(location: ?Location) {
+    AppMetrica.setLocation(location);
+  },
+
+  setLocationTracking(enabled: boolean) {
+    AppMetrica.setLocationTracking(enabled);
+  },
+
+  setStatisticsSending(enabled: boolean) {
+    AppMetrica.setStatisticsSending(enabled);
+  },
+
+  setUserProfileID(userProfileID?: string) {
+    AppMetrica.setUserProfileID(userProfileID);
+  },
 };
