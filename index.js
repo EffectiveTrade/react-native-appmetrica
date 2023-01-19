@@ -6,7 +6,7 @@
  * https://yandex.com/legal/appmetrica_sdk_agreement/
  */
 
-import {NativeModules} from 'react-native';
+import {NativeModules, Platform} from 'react-native';
 
 const {AppMetrica} = NativeModules;
 
@@ -50,7 +50,11 @@ type AppMetricaDeviceIdReason = 'UNKNOWN' | 'NETWORK' | 'INVALID_RESPONSE';
 export default {
 
   activate(config: AppMetricaConfig) {
-    AppMetrica.activate(config);
+    if (Platform.OS === 'ios') {
+      AppMetrica.activateWithConfig(config);
+    } else {
+      AppMetrica.activate(config);
+    }
   },
 
   // Android
