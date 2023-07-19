@@ -39,6 +39,14 @@ RCT_EXPORT_METHOD(reportError:(NSString *)message) {
     [YMMYandexMetrica reportError:message exception:exception onFailure:NULL];
 }
 
+RCT_EXPORT_METHOD(resumeSession) {
+    [YMMYandexMetrica resumeSession];
+}
+
+RCT_EXPORT_METHOD(pauseSession) {
+    [YMMYandexMetrica pauseSession];
+}
+
 RCT_EXPORT_METHOD(setUserProfileID:(NSString *)userProfileID) {
     [YMMYandexMetrica setUserProfileID:userProfileID];
 }
